@@ -1,0 +1,12 @@
+### Get For Channel ID
+
+GET https://www.youtube.com/@RailCowGirl
+
+### Get Broadcasting Channel
+
+GET https://youtube.com/channel/UCj-Xm8j6WBgKY8OG7s9r2vQ/live
+
+
+### Get Non-Broadcasting Channel
+
+GET https://youtube.com/channel/UC101o-vQ2iOj9vr00JUlyKw/live
