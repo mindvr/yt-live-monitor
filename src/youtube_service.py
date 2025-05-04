@@ -5,7 +5,7 @@ This module implements the core business logic for checking
 if a YouTube channel is currently livestreaming.
 """
 import logging
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional, Tuple
 
 from .channel_parser import extract_channel_id_from_url, check_channel_live_status, ParsingError
@@ -53,7 +53,7 @@ class YouTubeService:
                 - checked_at: Timestamp of when the check was performed
         """
         result = {
-            "checked_at": datetime.now(UTC).isoformat() + "Z"
+            "checked_at": datetime.now(timezone.utc).isoformat() + "Z"
         }
 
         try:
