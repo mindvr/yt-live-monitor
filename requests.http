@@ -1,0 +1,20 @@
+### Status
+
+http://localhost:8080/status
+
+### Get Channel ID
+
+POST http://localhost:8080/get-channel-id
+Content-Type: application/json
+
+{
+    "url": "https://www.youtube.com/@DigitalFoundry"
+}
+
+### Check Live (DF - probably not)
+
+GET http://localhost:8080/check-live/UC9PBzalIcEQCsiIkq36PyUA
+
+### Check live (RCG - probably yes)
+
+GET http://localhost:8080/check-live/UCj-Xm8j6WBgKY8OG7s9r2vQ

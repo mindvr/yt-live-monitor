@@ -97,6 +97,28 @@ async def check_live_by_url(
         logger.error(f"Error checking live status for URL {request.url}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/get-channel-id", response_model=Dict[str, str])
+async def get_channel_id_by_post(
+        request: ChannelUrlRequest = Body(..., description="YouTube URL or handle to extract channel ID from")
+) -> Dict[str, str]:
+    """
+    Extract a channel ID from a YouTube URL or handle using POST.
+
+    Args:
+        request: Request body containing the YouTube URL or handle
+
+    Returns:
+        dict: Dictionary containing the extracted channel ID
+
+    Raises:
+        HTTPException: If the extraction fails
+    """
+    try:
+        channel_id = YouTubeService.get_channel_id(request.url)
+        return {"channel_id": channel_id}
+    except Exception as e:
+        logger.error(f"Error extracting channel ID from {request.url}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 def run_server(host: str = "0.0.0.0", port: int = 8080):
     """
