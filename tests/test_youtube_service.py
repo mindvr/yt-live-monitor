@@ -37,7 +37,7 @@ class TestYouTubeService:
         """Test checking if a channel is live when the check succeeds."""
         # Setup the mocks
         mock_extract.return_value = "UCj-Xm8j6WBgKY8OG7s9r2vQ"
-        mock_check.return_value = (True, "https://www.youtube.com/watch?v=czoEAKX9aaM", None)
+        mock_check.return_value = (True, "https://www.youtube.com/watch?v=czoEAKX9aaM", "Test Title", None)
 
         # Perform the check
         result = YouTubeService.check_if_live("UCj-Xm8j6WBgKY8OG7s9r2vQ")
@@ -59,7 +59,7 @@ class TestYouTubeService:
         """Test checking if a channel is live when it's not."""
         # Setup the mocks
         mock_extract.return_value = "UCj-Xm8j6WBgKY8OG7s9r2vQ"
-        mock_check.return_value = (False, None, None)
+        mock_check.return_value = (False, None, None, None)
 
         # Perform the check
         result = YouTubeService.check_if_live("UCj-Xm8j6WBgKY8OG7s9r2vQ")
@@ -81,7 +81,7 @@ class TestYouTubeService:
         """Test checking if a channel is live when there's an error."""
         # Setup the mocks
         mock_extract.return_value = "UCj-Xm8j6WBgKY8OG7s9r2vQ"
-        mock_check.return_value = (False, None, "Test error")
+        mock_check.return_value = (False, None, None, "Test error")
 
         # Perform the check
         result = YouTubeService.check_if_live("UCj-Xm8j6WBgKY8OG7s9r2vQ")

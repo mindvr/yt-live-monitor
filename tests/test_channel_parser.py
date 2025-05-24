@@ -116,7 +116,7 @@ class TestChannelParser:
         mock_get.return_value = mock_response
 
         channel_id = "UCj-Xm8j6WBgKY8OG7s9r2vQ"
-        is_live, livestream_url, error = check_channel_live_status(channel_id)
+        is_live, livestream_url, title, error = check_channel_live_status(channel_id)
 
         assert is_live is True
         assert livestream_url == "https://www.youtube.com/watch?v=czoEAKX9aaM"
@@ -139,10 +139,11 @@ class TestChannelParser:
         mock_get.return_value = mock_response
 
         channel_id = "UC101o-vQ2iOj9vr00JUlyKw"
-        is_live, livestream_url, error = check_channel_live_status(channel_id)
+        is_live, livestream_url, title, error = check_channel_live_status(channel_id)
 
         assert is_live is False
         assert livestream_url is None
+        assert title is None
         assert error is None
         mock_get.assert_called_once()
         assert mock_get.call_args[0][0] == f"https://www.youtube.com/channel/{channel_id}/live"
@@ -155,9 +156,10 @@ class TestChannelParser:
         mock_get.side_effect = Exception("Test request error")
 
         channel_id = "UCj-Xm8j6WBgKY8OG7s9r2vQ"
-        is_live, livestream_url, error = check_channel_live_status(channel_id)
+        is_live, livestream_url, title, error = check_channel_live_status(channel_id)
 
         assert is_live is False
         assert livestream_url is None
+        assert title is None
         assert error is not None
         assert "Test request error" in error

@@ -21,8 +21,8 @@ Some YouTube channels keep their past livestreams as unlisted videos, making the
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/youtube-livestream-checker.git
-cd youtube-livestream-checker
+git clone https://github.com/mindvr/yt-live-monitor.git
+cd yt-live-monitor
 
 # Create a virtual environment
 python -m venv venv
@@ -36,10 +36,10 @@ pip install -r requirements.txt
 
 ```bash
 # Build the Docker image
-docker build -t youtube-livestream-checker .
+docker build -t yt-live-checker:latest .
 
 # Run the container
-docker run -p 8080:8080 youtube-livestream-checker
+docker run -p 8080:8080 --name yt-live-checker --rm yt-live-checker:latest
 ```
 
 ## Usage
@@ -50,8 +50,11 @@ docker run -p 8080:8080 youtube-livestream-checker
 # Check if a channel is livestreaming using a channel ID
 python -m src.main check-live UCj-Xm8j6WBgKY8OG7s9r2vQ
 
-# Check if a channel is livestreaming using a channel URL
+# Check if a channel is livestreaming using a channel URL or handle
 python -m src.main check-live https://www.youtube.com/@ChannelName
+
+# Get a channel ID from a URL or handle
+python -m src.main get-channel-id https://www.youtube.com/@ChannelName
 ```
 
 ### HTTP API
@@ -68,7 +71,8 @@ The service will be available at `http://localhost:8080`.
 
 - `GET /status` - Check API health
 - `GET /check-live/{channel_id}` - Check if a channel is livestreaming by ID
-- `POST /check-live` - Check if a channel is livestreaming by URL
+- `POST /check-live` - Check if a channel is livestreaming by URL or handle
+- `POST /get-channel-id` - Extract a channel ID from a YouTube URL or handle
 
 Example request:
 ```bash
@@ -90,8 +94,12 @@ Example response:
 ### Setup Development Environment
 
 ```bash
-# Install development dependencies
-pip install -r requirements-dev.txt
+# Create a virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows, use: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 
 # Run tests
 pytest
