@@ -34,6 +34,7 @@ class LivestreamCheckResponse(BaseModel):
     channel_id_or_url: Optional[str] = Field(None, description="The original input if channel ID extraction failed")
     is_live: bool = Field(..., description="Whether the channel is currently livestreaming")
     livestream_url: Optional[str] = Field(None, description="The URL of the livestream if live")
+    title: Optional[str] = Field(None, description="The title of the livestream if live")
     error: Optional[str] = Field(None, description="Error message if applicable")
     checked_at: str = Field(..., description="Timestamp of when the check was performed")
 

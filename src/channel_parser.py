@@ -142,6 +142,7 @@ def parse_channel_page(html_content: str) -> Dict[str, Any]:
         dict: A dictionary containing:
             - is_live (bool): Whether the channel is currently livestreaming
             - livestream_url (str, optional): The URL of the livestream if the channel is live
+            - title (str, optional): The title of the livestream if the channel is live
             - error (str, optional): Error message if parsing failed
 
     Raises:
@@ -161,15 +162,24 @@ def parse_channel_page(html_content: str) -> Dict[str, Any]:
 
         if video_id_match:
             video_id = video_id_match.group(1)
+
+            # Extract the title from the meta tag
+            title = None
+            meta_title = soup.find('meta', attrs={'name': 'title'})
+            if meta_title and meta_title.get('content'):
+                title = meta_title['content']
+
             return {
                 "is_live": True,
-                "livestream_url": f"https://www.youtube.com/watch?v={video_id}"
+                "livestream_url": f"https://www.youtube.com/watch?v={video_id}",
+                "title": title
             }
         else:
             # If the canonical URL points back to the channel, it's not livestreaming
             return {
                 "is_live": False,
-                "livestream_url": None
+                "livestream_url": None,
+                "title": None
             }
 
     except Exception as e:
@@ -177,7 +187,7 @@ def parse_channel_page(html_content: str) -> Dict[str, Any]:
         raise ParsingError(f"Failed to parse channel page: {str(e)}")
 
 
-def check_channel_live_status(channel_id: str) -> Tuple[bool, Optional[str], Optional[str]]:
+def check_channel_live_status(channel_id: str) -> Tuple[bool, Optional[str], Optional[str], Optional[str]]:
     """
     Check if a YouTube channel is currently livestreaming.
 
@@ -185,9 +195,10 @@ def check_channel_live_status(channel_id: str) -> Tuple[bool, Optional[str], Opt
         channel_id: The YouTube channel ID to check
 
     Returns:
-        Tuple[bool, Optional[str], Optional[str]]:
+        Tuple[bool, Optional[str], Optional[str], Optional[str]]:
             - is_live: Whether the channel is currently livestreaming
             - livestream_url: The URL of the livestream if the channel is live
+            - title: The title of the livestream if the channel is live
             - error: Error message if checking failed
     """
     try:
@@ -202,14 +213,14 @@ def check_channel_live_status(channel_id: str) -> Tuple[bool, Optional[str], Opt
         response.raise_for_status()
 
         result = parse_channel_page(response.text)
-        return result["is_live"], result.get("livestream_url"), None
+        return result["is_live"], result.get("livestream_url"), result.get("title"), None
 
     except requests.RequestException as e:
         logger.error(f"Request error while checking live status: {e}")
-        return False, None, f"Network error: {str(e)}"
+        return False, None, None, f"Network error: {str(e)}"
     except ParsingError as e:
         logger.error(f"Parsing error while checking live status: {e}")
-        return False, None, str(e)
+        return False, None, None, str(e)
     except Exception as e:
         logger.error(f"Unexpected error while checking live status: {e}")
-        return False, None, f"Unexpected error: {str(e)}"
+        return False, None, None, f"Unexpected error: {str(e)}"

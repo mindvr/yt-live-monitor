@@ -62,12 +62,15 @@ class YouTubeService:
             result["channel_id"] = channel_id
 
             # Then check if the channel is live
-            is_live, livestream_url, error = check_channel_live_status(channel_id)
+            is_live, livestream_url, title, error = check_channel_live_status(channel_id)
 
             result["is_live"] = is_live
 
             if livestream_url:
                 result["livestream_url"] = livestream_url
+
+            if title:
+                result["title"] = title
 
             if error:
                 result["error"] = error
