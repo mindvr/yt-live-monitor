@@ -20,4 +20,4 @@ docker-build:
 	docker build -t yt-live-checker:latest .
 
 docker-run:
-	docker run --name yt-live-checker -p 8080:8080 yt-live-checker:latest
+	docker run --name yt-live-checker -p 8080:8080 --rm yt-live-checker:latest
