@@ -53,6 +53,8 @@ def check_live(channel_id_or_url: str, json_output: bool):
 
         if result["is_live"]:
             print("Status: LIVE")
+            if "title" in result:
+                print(f"Title: {result['title']}")
             print(f"Livestream URL: {result['livestream_url']}")
         else:
             print("Status: NOT LIVE")
