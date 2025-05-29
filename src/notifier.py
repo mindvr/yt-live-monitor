@@ -4,7 +4,12 @@ import requests
 
 logger = logging.getLogger(__name__)
 
+sent_messages = set()
+
 def _send_telegram_notification(message: str):
+    if message in sent_messages:
+        return
+
     tg_url = os.environ.get('TG_URL')
     tg_route = os.environ.get('TG_ROUTE')
     if not tg_url or not tg_route:
@@ -17,7 +22,9 @@ def _send_telegram_notification(message: str):
         "message": message
     }
     response = requests.post(tg_url, json=payload)
-    if not response.ok:
+    if response.ok:
+        sent_messages.add(message)
+    else:
         logger.error(f"Failed to send notification. Status code: {response.status_code}, Response: {response.text}")
 
 
