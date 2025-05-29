@@ -9,6 +9,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY src ./src
 
+# Set environment variables
+ENV POLL_FREQUENCY_MINUTES=30
+ENV MONITORED_CHANNEL_ID=""
+ENV TG_URL=""
+ENV TG_ROUTE=""
+
 # Expose port used by the web service
 EXPOSE 8080
 

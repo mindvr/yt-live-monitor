@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field, validator
 import uvicorn
 
 from .youtube_service import YouTubeService, ParsingError
+from .scheduler import lifespan
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -21,6 +22,7 @@ app = FastAPI(
     title="YouTube Livestream Checker",
     description="Check if a YouTube channel is currently livestreaming",
     version="1.0.0",
+    lifespan=lifespan
 )
 
 
@@ -98,6 +100,7 @@ async def check_live_by_url(
         logger.error(f"Error checking live status for URL {request.url}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.post("/get-channel-id", response_model=Dict[str, str])
 async def get_channel_id_by_post(
         request: ChannelUrlRequest = Body(..., description="YouTube URL or handle to extract channel ID from")
@@ -120,6 +123,7 @@ async def get_channel_id_by_post(
     except Exception as e:
         logger.error(f"Error extracting channel ID from {request.url}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 def run_server(host: str = "0.0.0.0", port: int = 8080):
     """
